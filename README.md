@@ -1,2 +1,3 @@
-# dinamikaatmosfer
-Penjelasan tentang dinamika atmosfer yang sedang terjadi (Lokal, regional maupun global)
+# Skala Atmosfer Aktif
+
+Aplikasi Streamlit untuk menampilkan skala atmosfer global, regional, dan lokal yang sedang memengaruhi wilayah Indonesia secara real-time.
