@@ -10,28 +10,14 @@ st.title("🌀 SKALA ATMOSFER AKTIF SAAT INI")
 st.markdown("*Pantau skala atmosfer global, regional, dan lokal yang sedang memengaruhi kota pilihanmu.*")
 st.markdown("**Editor: Ferri Kusuma (STMKG/M8TB_14.22.0003)**")
 
-# ==================== RIWAYAT KOTA ====================
-if "riwayat_kota" not in st.session_state:
-    st.session_state.riwayat_kota = []
-
+# ==================== INPUT KOTA ====================
 st.markdown("### 🏙️ Masukkan Nama Kota")
-
-# Tombol cepat dari riwayat sebelumnya
-for kota_riwayat in reversed(st.session_state.riwayat_kota[-5:]):
-    if st.button(f"📍 {kota_riwayat}"):
-        st.session_state.kota_terpilih = kota_riwayat
-
-# Input teks manual
-kota_input = st.text_input(" ", "Malang").strip().title()
-kota = st.session_state.get("kota_terpilih", kota_input)
-
-# Simpan ke riwayat
-if kota and kota not in st.session_state.riwayat_kota:
-    st.session_state.riwayat_kota.append(kota)
+kota = st.text_input(" ", "Malang").strip().title()
 
 if kota:
     st.markdown(f"📍 **Kota yang dipilih:** `{kota}`")
 
+    # ==================== GEOCODING ====================
     geolocator = Nominatim(user_agent="geoapi")
     location = geolocator.geocode(kota)
 
@@ -170,7 +156,6 @@ if kota:
 
         st.markdown("---")
         st.caption("📡 Semua data bersifat simulasi. Akan ditautkan ke sumber data BMKG/NOAA pada versi mendatang.")
-
     else:
         st.error("❗ Kota tidak ditemukan. Mohon cek kembali ejaannya.")
 else:
