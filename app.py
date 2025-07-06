@@ -28,7 +28,6 @@ if kota:
         st.markdown("### 🗺️ Lokasi Kota di Peta")
         m = folium.Map(location=[lat, lon], zoom_start=6)
         folium.Marker([lat, lon], tooltip=kota, icon=folium.Icon(color='blue')).add_to(m)
-
         folium.Circle(
             radius=400000,
             location=[lat, lon],
@@ -37,7 +36,6 @@ if kota:
             fill_opacity=0.05,
             popup="Zona pengaruh atmosfer",
         ).add_to(m)
-
         st_folium(m, width=700, height=450)
 
         # ==================== SKALA GLOBAL: MJO ====================
@@ -109,6 +107,48 @@ if kota:
                 """)
             else:
                 st.info("Wilayah ini tidak sedang dipengaruhi oleh seruak angin selatan (surge).")
+
+        # ==================== SKALA GLOBAL: ENSO ====================
+        with st.expander("🌐 Skala Global: ENSO (El Niño–Southern Oscillation)", expanded=True):
+            enso_status = "La Niña"
+            enso_mulai = datetime(2025, 6, 10)
+            enso_selesai = datetime(2025, 8, 15)
+
+            if enso_status == "El Niño":
+                st.error(f"🔥 Saat ini terjadi **El Niño** sejak {enso_mulai.strftime('%d %b')} — potensi kekeringan meningkat.")
+                st.markdown("""
+                - 🌡️ Suhu laut Pasifik tengah lebih hangat dari normal.
+                - 📉 Curah hujan di Indonesia berkurang, potensi kekeringan & kebakaran meningkat.
+                """)
+            elif enso_status == "La Niña":
+                st.success(f"🌧️ Saat ini terjadi **La Niña** sejak {enso_mulai.strftime('%d %b')} — curah hujan cenderung meningkat.")
+                st.markdown("""
+                - 🌊 Suhu laut Pasifik lebih dingin dari normal.
+                - ☔ Indonesia berpotensi mengalami hujan di luar musimnya.
+                """)
+            else:
+                st.info("✅ ENSO saat ini berada dalam kondisi **netral**.")
+
+        # ==================== SKALA GLOBAL: IOD ====================
+        with st.expander("🌐 Skala Global: Indian Ocean Dipole (IOD)", expanded=True):
+            iod_status = "Negatif"
+            iod_mulai = datetime(2025, 6, 20)
+            iod_selesai = datetime(2025, 9, 5)
+
+            if iod_status == "Positif":
+                st.error("📉 IOD saat ini **positif** — curah hujan di Indonesia bagian barat cenderung berkurang.")
+                st.markdown(f"""
+                - 🗓️ Aktif sejak: {iod_mulai.strftime('%d %b')} hingga {iod_selesai.strftime('%d %b')}
+                - 🔥 Lebih banyak panas dan kering di Sumatera, Jawa bagian barat.
+                """)
+            elif iod_status == "Negatif":
+                st.success("🌧️ IOD saat ini **negatif** — meningkatkan potensi hujan di wilayah barat Indonesia.")
+                st.markdown(f"""
+                - 🗓️ Aktif sejak: {iod_mulai.strftime('%d %b')} hingga {iod_selesai.strftime('%d %b')}
+                - 💧 Suhu laut Samudera Hindia dekat Sumatera lebih hangat → hujan lebih mudah terbentuk.
+                """)
+            else:
+                st.info("✅ IOD berada dalam kondisi **netral**.")
 
         st.markdown("---")
         st.caption("📡 Semua data bersifat simulasi. Akan ditautkan ke sumber data BMKG/NOAA pada versi mendatang.")
