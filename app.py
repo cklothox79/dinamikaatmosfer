@@ -6,36 +6,36 @@ st.set_page_config(page_title="Skala Atmosfer Aktif", layout="wide")
 st.title("🌀 SKALA ATMOSFER AKTIF SAAT INI")
 st.markdown("Pantau skala atmosfer global, regional, dan lokal yang sedang memengaruhi kota pilihanmu.")
 
-# ==================== INPUT KOTA ====================
-kota = st.selectbox("Pilih kota", ["Malang", "Surabaya", "Sidoarjo", "Jakarta", "Bandung", "Semarang"])
+# ==================== INPUT KOTA BEBAS ====================
+kota = st.text_input("Masukkan nama kota", "Malang").strip().title()
 
-st.markdown(f"📍 **Kota yang dipilih:** `{kota}`")
+if kota:
+    st.markdown(f"📍 **Kota yang dipilih:** `{kota}`")
 
-# ==================== MJO SIMULASI ====================
-# Simulasi data MJO (nantinya ini bisa diganti dari API BMKG atau NOAA)
-fase_mjo = 4  # fase 4 = pengaruh ke Jawa
-mjo_aktif = True
-start_date = datetime.today() - timedelta(days=3)
-end_date = datetime.today() + timedelta(days=5)
+    # ========== SIMULASI DATA MJO ==========
+    fase_mjo = 4  # bisa diganti dengan input API nantinya
+    mjo_aktif = True
+    start_date = datetime(2025, 7, 3)
+    end_date = datetime(2025, 7, 11)
 
-# ==================== LOGIKA ====================
-mjo_pengaruh_jawa = [2, 3, 4, 5]  # fase yang memengaruhi Jawa
-pengaruh = kota.lower() in ["malang", "surabaya", "sidoarjo"] and fase_mjo in mjo_pengaruh_jawa
+    # Kota-kota di Indonesia yang dipengaruhi fase 2–5
+    wilayah_dipengaruhi_mjo = ["Malang", "Surabaya", "Sidoarjo", "Jember", "Kediri", "Blitar", "Lumajang"]
+    pengaruh = kota in wilayah_dipengaruhi_mjo and fase_mjo in [2, 3, 4, 5]
 
-# ==================== TAMPILKAN HASIL ====================
-with st.expander("🌐 Skala Global: Madden-Julian Oscillation (MJO)"):
-    if mjo_aktif and pengaruh:
-        st.success(f"✅ MJO sedang aktif di fase {fase_mjo} dan **memengaruhi wilayah {kota}**.")
-        st.markdown(f"""
-        - 🗓️ **Durasi aktif:** {start_date.strftime('%d %b %Y')} hingga {end_date.strftime('%d %b %Y')}
-        - ☁️ **Dampak umum:** Meningkatkan peluang hujan, pembentukan awan konvektif, potensi cuaca ekstrem lokal.
-        """)
-    elif mjo_aktif:
-        st.info(f"MJO aktif di fase {fase_mjo}, namun belum langsung memengaruhi wilayah {kota}.")
-    else:
-        st.warning("MJO tidak aktif saat ini.")
+    # ========== OUTPUT MJO ==========
+    with st.expander("🌐 Skala Global: Madden-Julian Oscillation (MJO)", expanded=True):
+        if mjo_aktif and pengaruh:
+            st.success(f"✅ MJO sedang aktif di fase {fase_mjo} dan **memengaruhi wilayah {kota}**.")
+            st.markdown(f"""
+            - 🗓️ **Durasi aktif:** {start_date.strftime('%d %b %Y')} hingga {end_date.strftime('%d %b %Y')}
+            - ☁️ **Dampak umum:** Meningkatkan peluang hujan, pembentukan awan konvektif, potensi cuaca ekstrem lokal.
+            """)
+        elif mjo_aktif:
+            st.info(f"MJO sedang aktif di fase {fase_mjo}, tetapi **belum berdampak langsung** pada wilayah {kota}.")
+        else:
+            st.warning("MJO tidak aktif saat ini.")
 
-# ==================== PENGEMBANGAN ====================
-st.markdown("---")
-st.caption("📡 Data simulasi. Ke depan akan dihubungkan dengan data BMKG/NOAA secara langsung.")
-
+    st.markdown("---")
+    st.caption("📡 Data simulasi. Akan terhubung ke data real-time dari BMKG atau NOAA di versi berikutnya.")
+else:
+    st.warning("Silakan masukkan nama kota terlebih dahulu.")
